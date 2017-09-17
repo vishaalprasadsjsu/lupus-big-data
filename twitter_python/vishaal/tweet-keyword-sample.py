@@ -33,10 +33,10 @@ ids = ['lupus']
        # '%23',] # enter your search terms
        
 from twython import Twython
-t = Twython(app_key='QvaBYUczY2cTs22nzoc0BtNnD',
-    app_secret='DUEL4qczAmE2k3RY4m2pvI2ziqkfu7PKk4iuvS9YpiupgJsMP5', 
-    oauth_token='2899830031-zwpmUomXuQ9J2VHOkwcAmvsPYHTTx73gMfWmgfR', 
-    oauth_token_secret='o8hhmAkd8S4OWlgjgeIbUsc81jitWMS2hNXziTgFYCeik')
+t = Twython(app_key='',
+    app_secret='', 
+    oauth_token='', 
+    oauth_token_secret='')
 
 Base = declarative_base()
 
