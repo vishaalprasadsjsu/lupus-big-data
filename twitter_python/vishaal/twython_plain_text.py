@@ -17,14 +17,17 @@ from sqlalchemy import Unicode
 from sqlalchemy.sql import join
 from types import *
 from datetime import datetime, date, time
+
 import keys
 
 '''
 Uses twython to make API calls to twitter 
-This will output all data into a SQLITE database
+This will output all data in two ways: 
+    SQLITE database - lots of metadata 
+    Plain text (each line contains the tweet text) 
 '''
 
-# search terms 
+# search keys
 ids = ['lupus']
        # '%23',] # enter your search terms
        
@@ -180,7 +183,11 @@ def write_data(self, d):
         else:
             retweeted_status = ''  
         content = entry['text']
-        content = content.replace('\n','')         
+        content = content.replace('\n',' ')
+        
+        with open("twython_data.txt", "a") as myfile:
+        	myfile.write('\n')
+    		myfile.write(content.encode("utf-8"))
         
         created_at_text = entry['created_at']     
         created_at = datetime.strptime(created_at_text, '%a %b %d %H:%M:%S +0000 %Y')   
