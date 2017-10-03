@@ -1,4 +1,4 @@
-# Python:
+############## Python ##############
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -104,11 +104,7 @@ ENV/
 # r authentication files
 *.httr-oauth 
 
-# key files:
-keys.py
-
-
-# R: 
+############## R ##############
 # History files
 .Rhistory
 .Rapp.history
@@ -143,3 +139,6 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
+############## specific to this project ##############
+keys.py
+*.sqlite

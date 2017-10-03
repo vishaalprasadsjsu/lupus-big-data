@@ -26,7 +26,6 @@ This will output all data into a SQLITE database
 
 # search terms 
 ids = ['lupus']
-       # '%23',] # enter your search terms
        
 from twython import Twython
 t = Twython(app_key=keys.app_key,
@@ -42,7 +41,7 @@ class Messages(Base):
     
     id = Column(Integer, primary_key=True)  
     query = Column(String)
-    tweet_id = Column(String) 
+    tweet_id = Column(Integer, unique=True) 
     inserted_date = Column(DateTime)
     truncated = Column(String)
     language = Column(String)
@@ -140,12 +139,15 @@ def get_data(kid, max_id=None):
     except Exception, e:
         print "Error reading id %s, exception: %s" % (kid, e)
         return None
-    print "d.keys(): ", d.keys()   
-    print "######## # OF STATUSES IN THIS GRAB: ", len(d['statuses'])
-    print "max_id VALUE USED FOR THIS GRAB-->", max_id
+    # print "d.keys(): ", d.keys()   
+    # print "######## # OF STATUSES IN THIS GRAB: ", len(d['statuses'])
+    # print "max_id VALUE USED FOR THIS GRAB-->", max_id
     return d
     
 def write_data(self, d):   
+
+    collisions = 0
+    new_tweets = 0
 
     query = d['search_metadata']['query']
     
@@ -165,13 +167,13 @@ def write_data(self, d):
         
         coordinates = []
         if 'coordinates' in entry and entry['coordinates'] != None:
-            print entry['coordinates']['coordinates']
+            # print entry['coordinates']['coordinates']
             for coordinate in entry['coordinates']['coordinates']:
-                print coordinate, type(coordinate)
+                # print coordinate, type(coordinate)
                 coordinates.append(coordinate)
            
             coordinates = ', '.join(map(str, coordinates))							
-            print type(coordinates), len(coordinates), coordinates
+            # print type(coordinates), len(coordinates), coordinates
         else:
             coordinates = ''
             
@@ -214,24 +216,24 @@ def write_data(self, d):
                 expanded_url = link['expanded_url']
                 entities_urls.append(url)
                 entities_expanded_urls.append(expanded_url)
-            else:
-                print "No urls in entry"
+            # else:
+                # print "No urls in entry"
         
         entities_hashtags = []
         for hashtag in entry['entities']['hashtags']:
             if 'text' in hashtag:
                 tag = hashtag['text']
                 entities_hashtags.append(tag)
-            else:
-                print "No hashtags in entry"
+            # else:
+                # print "No hashtags in entry"
         
         entities_mentions = []
         for at in entry['entities']['user_mentions']:
             if 'screen_name' in at:
                 mention = at['screen_name']
                 entities_mentions.append(mention)
-            else:
-                print "No mentions in entry"
+            # else:
+                # print "No mentions in entry"
                 
         entities_mentions = string.join(entities_mentions, u", ")
         entities_hashtags = string.join(entities_hashtags, u", ")
@@ -241,18 +243,18 @@ def write_data(self, d):
         video_link = 0
         if 'vimeo' in entities_expanded_urls or 'youtube' in entities_expanded_urls or 'youtu' in entities_expanded_urls or 'vine' in entities_expanded_urls:
             video_link = 1					
-            print "Found video"
+            # print "Found video"
         else:
             video_link = 0
             
         if 'twitpic' in entities_expanded_urls:
             twitpic = 1						
-            print "Found a twitpic link"
+            # print "Found a twitpic link"
         else:
             twitpic = 0
         if 'twitpic' in entities_expanded_urls or 'instagram' in entities_expanded_urls or 'instagr' in entities_expanded_urls:
             photo_link = 1					
-            print "Found a twitpic or instagram link"
+            # print "Found a twitpic or instagram link"
         else:
             photo_link = 0
 
@@ -262,18 +264,18 @@ def write_data(self, d):
         entities_hashtags = unicode(entities_hashtags)
         entities_mentions = unicode(entities_mentions)
     
-        print "urls...?....", 
-        print "user_mentions...?....", 
-        print "hashtags...?....", 
+        # print "urls...?....", 
+        # print "user_mentions...?....", 
+        # print "hashtags...?....", 
         
 
-        if 'symbols' in entry['entities']:
-		    print "HERE ARE THE SYMBOLS.......", 
-        else:
-		    print "NO entry['entities']['symbols']"
+      #   if 'symbols' in entry['entities']:
+		    # print "HERE ARE THE SYMBOLS.......", 
+      #   else:
+		    # print "NO entry['entities']['symbols']"
 		
         if 'media' in entry['entities']:
-			print "HERE ARE THE MEDIA.......", #entry['entities']['media']
+			# print "HERE ARE THE MEDIA.......", #entry['entities']['media']
 			entities_media_count = len(entry['entities']['media'])   
         else:
             entities_media_count = ''
@@ -283,19 +285,19 @@ def write_data(self, d):
             if 'expanded_url' in entry['entities']['media'][0]:
 		        media_expanded_url = entry['entities']['media'][0]['expanded_url']
             else:
-                print "NO expanded_url in entry['entities']['media']"
+                # print "NO expanded_url in entry['entities']['media']"
                 media_expanded_url = ''
 					    
             if 'media_url' in entry['entities']['media'][0]:
 		        media_url = entry['entities']['media'][0]['media_url']
             else:
-		        print "NO media_url in entry['entities']['media']"
+		        # print "NO media_url in entry['entities']['media']"
 		        media_url = ''
 					    
             if 'type' in entry['entities']['media'][0]:
 		        media_type = entry['entities']['media'][0]['type']
             else:
-		        print "NO type in entry['entities']['media']"
+		        # print "NO type in entry['entities']['media']"
 		        media_type = ''
         else:
 		    media_type = ''
@@ -304,46 +306,55 @@ def write_data(self, d):
 
 
       
-        updates = self.session.query(Messages).filter_by(query=query, from_user_screen_name=from_user_screen_name,
-                content=content).all() 
-        if not updates:
-            print "inserting, query:", query                   
+        # updates = self.session.query(Messages).filter_by(query=query, from_user_screen_name=from_user_screen_name,
+                # content=content).all() 
+        # if not updates:
+            # print "inserting, query:", query                   
                     
-            upd = Messages(query, tweet_id, inserted_date, truncated, language, possibly_sensitive, 
-                coordinates, retweeted_status, created_at_text, 
-                created_at, content, from_user_screen_name, from_user_id, from_user_followers_count, 
-                from_user_friends_count, from_user_listed_count, from_user_statuses_count, from_user_description,   
-                from_user_location, from_user_created_at, retweet_count, entities_urls, entities_urls_count,         
-                entities_hashtags, entities_hashtags_count, entities_mentions,entities_mentions_count, in_reply_to_screen_name, in_reply_to_status_id, source, entities_expanded_urls, json_output, 
-                entities_media_count, media_expanded_url, media_url, media_type,video_link, photo_link,twitpic
-                )
-            self.session.add(upd)
+        upd = Messages(query, tweet_id, inserted_date, truncated, language, possibly_sensitive, 
+            coordinates, retweeted_status, created_at_text, 
+            created_at, content, from_user_screen_name, from_user_id, from_user_followers_count, 
+            from_user_friends_count, from_user_listed_count, from_user_statuses_count, from_user_description,   
+            from_user_location, from_user_created_at, retweet_count, entities_urls, entities_urls_count,         
+            entities_hashtags, entities_hashtags_count, entities_mentions,entities_mentions_count, in_reply_to_screen_name, in_reply_to_status_id, source, entities_expanded_urls, json_output, 
+            entities_media_count, media_expanded_url, media_url, media_type,video_link, photo_link,twitpic
+            )
+        self.session.add(upd)
       
                 
-        else:
-            if len(updates) > 1:
-                print "Warning: more than one update matching to_user=%s, text=%s"\
-                        % (to_user, content)
-            else:
-                print "Not inserting, dupe.."
+        # else:
+        #     if len(updates) > 1:
+        #         print "Warning: more than one update matching to_user=%s, text=%s"\
+        #                 % (to_user, content)
+        #     else:
+        #         print "Not inserting, dupe.."
         
-        self.session.commit()
-        
-      
+        # self.session.commit()
+
+        try:
+            self.session.commit()
+            new_tweets += 1
+        except:
+            self.session.rollback()
+            collisions += 1
+
+    print "\t", new_tweets, "\t", collisions
 
 class Scrape:
     def __init__(self):    
-        engine = sqlalchemy.create_engine("sqlite:///MH370.sqlite", echo=False)  
+        engine = sqlalchemy.create_engine("sqlite:///en_lupus.sqlite", echo=False)  
         Session = sessionmaker(bind=engine)
         self.session = Session()  
         Base.metadata.create_all(engine)
 
-
     def main(self):
+
         for n, kid in enumerate(ids):
             print "\rprocessing id %s/%s" % (n+1, len(ids)),
             sys.stdout.flush()
+            print ""
 
+            print "Page\tnew\tcollisions"
 
             d = get_data(kid)
             if not d:
@@ -361,45 +372,46 @@ class Scrape:
             min_id = last_status['id']
             
             max_id = min_id-1        
-            print 'THIS IS THE min_id IN THE CURRENT SET OF TWEETS: ', max_id
+            # print 'THIS IS THE min_id IN THE CURRENT SET OF TWEETS: ', max_id
            
             if len(d['statuses']) >1:
           
-                print "THERE WAS AT LEAST 1 STATUS ON THE FIRST PAGE! NOW MOVING TO GRAB EARLIER TWEETS"
-              
+                # print "THERE WAS AT LEAST 1 STATUS ON THE FIRST PAGE! NOW MOVING TO GRAB EARLIER TWEETS"
+
                 count = 2
-                while count < 40:
-                    print "------XXXXXX------ STARTING PAGE", count
+                max_count = 40
+                while count < max_count:
+                    print "\r%s" % (count),
+                    sys.stdout.flush()
+
                     d = get_data(kid, max_id)
                     
                     if not d:
                         break
                     elif not d['statuses']:
-                        
                         break	
                     
                     last_status = d['statuses'][-1]
                     min_id = last_status['id']
-                
                   
                     max_id = min_id-1
-                    print 'THIS IS THE min_id IN THE CURRENT SET OF TWEETS: ', max_id
-                   
-                    
+                    # print 'THIS IS THE min_id IN THE CURRENT SET OF TWEETS: ', max_id
+
                     if not d:
                         continue	       
 
                     write_data(self, d) 
                     self.session.commit()
                     
-                    print "------XXXXXX------ FINISHED WITH PAGE", len(d['statuses']), count
+                    # print "FINISHED WITH PAGE", len(d['statuses']), count
+                    # print "finished page ", count
                     if not len(d['statuses']) > 0:
-    
-                        print "--------------> REACHED THE LAST PAGE -- MOVING TO NEXT ID"
+
+                        print "REACHED THE LAST PAGE -- MOVING TO NEXT ID"
                         break                    
                     count += 1
-                    if count >40:
-                        print "At page 40"
+                    if count > max_count:
+                        print "At page ", max_count
                         break
             self.session.commit()
 
