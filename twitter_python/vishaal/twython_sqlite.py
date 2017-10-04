@@ -134,7 +134,7 @@ class Messages(Base):
 
 def get_data(kid, max_id=None):
     try:
-        d = t.search(q=kid, count = '100', result_type = 'recent', lang = 'en', max_id = max_id) 
+        d = t.search(q=kid, count = '100', result_type = 'recent', lang = 'en', max_id = max_id, tweet_mode='extended') 
         
     except Exception, e:
         print "Error reading id %s, exception: %s" % (kid, e)
@@ -181,9 +181,10 @@ def write_data(self, d):
             retweeted_status = 'THIS IS A RETWEET --> DOUBLE-CHECK JSON'
         else:
             retweeted_status = ''  
-        content = entry['text']
-        content = content.replace('\n','')         
         
+        content = entry['full_text']
+        # content = content.replace('\n','')
+
         created_at_text = entry['created_at']     
         created_at = datetime.strptime(created_at_text, '%a %b %d %H:%M:%S +0000 %Y')   
         created_at2 = created_at.strftime('%Y-%m-%d %H:%M:%S')   
@@ -310,6 +311,10 @@ def write_data(self, d):
                 # content=content).all() 
         # if not updates:
             # print "inserting, query:", query                   
+
+        # only add if tweet's content contains keyword 
+        # if (query.lower() in content.lower()): 
+
                     
         upd = Messages(query, tweet_id, inserted_date, truncated, language, possibly_sensitive, 
             coordinates, retweeted_status, created_at_text, 
