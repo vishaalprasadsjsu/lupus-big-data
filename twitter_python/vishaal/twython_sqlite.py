@@ -305,43 +305,26 @@ def write_data(self, d):
 		    media_url = ''
 		    media_expanded_url = ''
 
+        # print which ones we're skipping 
+        # QUERY not in CONTENT 
+        if (query.lower() in content.lower()):
 
+            upd = Messages(query, tweet_id, inserted_date, truncated, language, possibly_sensitive, 
+                coordinates, retweeted_status, created_at_text, 
+                created_at, content, from_user_screen_name, from_user_id, from_user_followers_count, 
+                from_user_friends_count, from_user_listed_count, from_user_statuses_count, from_user_description,   
+                from_user_location, from_user_created_at, retweet_count, entities_urls, entities_urls_count,         
+                entities_hashtags, entities_hashtags_count, entities_mentions,entities_mentions_count, in_reply_to_screen_name, in_reply_to_status_id, source, entities_expanded_urls, json_output, 
+                entities_media_count, media_expanded_url, media_url, media_type,video_link, photo_link,twitpic)
+            
+            self.session.add(upd)
       
-        # updates = self.session.query(Messages).filter_by(query=query, from_user_screen_name=from_user_screen_name,
-                # content=content).all() 
-        # if not updates:
-            # print "inserting, query:", query                   
-
-        # only add if tweet's content contains keyword 
-        # if (query.lower() in content.lower()): 
-
-                    
-        upd = Messages(query, tweet_id, inserted_date, truncated, language, possibly_sensitive, 
-            coordinates, retweeted_status, created_at_text, 
-            created_at, content, from_user_screen_name, from_user_id, from_user_followers_count, 
-            from_user_friends_count, from_user_listed_count, from_user_statuses_count, from_user_description,   
-            from_user_location, from_user_created_at, retweet_count, entities_urls, entities_urls_count,         
-            entities_hashtags, entities_hashtags_count, entities_mentions,entities_mentions_count, in_reply_to_screen_name, in_reply_to_status_id, source, entities_expanded_urls, json_output, 
-            entities_media_count, media_expanded_url, media_url, media_type,video_link, photo_link,twitpic
-            )
-        self.session.add(upd)
-      
-                
-        # else:
-        #     if len(updates) > 1:
-        #         print "Warning: more than one update matching to_user=%s, text=%s"\
-        #                 % (to_user, content)
-        #     else:
-        #         print "Not inserting, dupe.."
-        
-        # self.session.commit()
-
-        try:
-            self.session.commit()
-            new_tweets += 1
-        except:
-            self.session.rollback()
-            collisions += 1
+            try:
+                self.session.commit()
+                new_tweets += 1
+            except:
+                self.session.rollback()
+                collisions += 1
 
     print "\t", new_tweets, "\t", collisions
 
