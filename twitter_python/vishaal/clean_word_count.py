@@ -3,6 +3,7 @@ from collections import Counter
 from nltk.corpus import stopwords
 import string
 import re
+from nltk import bigrams 
 
 '''
 Counts the most frequent words in a text file
@@ -56,6 +57,7 @@ with open(fname, 'r') as f:
     count_all = Counter()
     count_hash = Counter()
     count_terms_only = Counter()
+    terms_only_bigram = Counter()
     for line in f:
     	# for json: 
         # tweet = json.loads(line)
@@ -79,14 +81,23 @@ with open(fname, 'r') as f:
                       # mind the ((double brackets))
                       # startswith() takes a tuple (not a list) if 
                       # we pass a list of inputs
+        terms_only_bigram.update(bigrams(terms_only))
         count_terms_only.update(terms_only)
         count_hash.update(terms_hash)
 
 # most frequent words (not cleaned, includes punctuation etc.)
+print "Most common (not clean)"
 print(count_all.most_common(5))
 
 # most frequent words, cleaned 
-print(count_terms_only.most_common(10))
+print "Most common (clean)"
+print(count_terms_only.most_common(5))
+
+print "Bigram (clean)"
+print(terms_only_bigram.most_common(10))
 
 # most hashtags
-print(count_hash.most_common(10))
+print "Most common Hashtags"
+print(count_hash.most_common(5))
+
+
