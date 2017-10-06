@@ -4,6 +4,7 @@ from nltk.corpus import stopwords
 import string
 import re
 from nltk import bigrams 
+from collections import defaultdict
 
 '''
 Counts the most frequent words in a text file
@@ -17,7 +18,10 @@ Output:
 punctuation = list(string.punctuation)
 # rt and via specific to this project, add them
 stop = stopwords.words('english') + punctuation + ['RT', 'via'] 
+# for co-occurrences 
+com = defaultdict(lambda : defaultdict(int))
 
+# file
 fname = 'twython_data.txt'
 
 emoticons_str = r"""
@@ -85,19 +89,39 @@ with open(fname, 'r') as f:
         count_terms_only.update(terms_only)
         count_hash.update(terms_hash)
 
+        for i in range(len(terms_only)-1):            
+            for j in range(i+1, len(terms_only)):
+                w1, w2 = sorted([terms_only[i], terms_only[j]])                
+                if w1 != w2:
+                    com[w1][w2] += 1
+
+
+com_max = []
+# For each term, look for the most common co-occurrent terms
+for t1 in com:
+    t1_max_terms = sorted(com[t1].items(), key=operator.itemgetter(1), reverse=True)[:5]
+    for t2, t2_count in t1_max_terms:
+        com_max.append(((t1, t2), t2_count))
+# Get the most frequent co-occurrences
+terms_max = sorted(com_max, key=operator.itemgetter(1), reverse=True)
+print(terms_max[:5])
+
+print
 # most frequent words (not cleaned, includes punctuation etc.)
-print "Most common (not clean)"
+print("Most common (not clean)")
 print(count_all.most_common(5))
+print
 
 # most frequent words, cleaned 
-print "Most common (clean)"
+print("Most common (clean)")
 print(count_terms_only.most_common(5))
+print
 
-print "Bigram (clean)"
+print("Bigram (clean)")
 print(terms_only_bigram.most_common(10))
+print
 
 # most hashtags
-print "Most common Hashtags"
+print("Most common Hashtags")
 print(count_hash.most_common(5))
-
 
