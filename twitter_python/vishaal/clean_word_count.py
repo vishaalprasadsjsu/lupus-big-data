@@ -24,6 +24,9 @@ com = defaultdict(lambda : defaultdict(int))
 # file
 fname = 'twython_data.txt'
 
+# for co-occurrences
+search_word = 'Selena'
+
 emoticons_str = r"""
     (?:
         [:=;] # Eyes
@@ -62,6 +65,7 @@ with open(fname, 'r') as f:
     count_hash = Counter()
     count_terms_only = Counter()
     terms_only_bigram = Counter()
+    count_search = Counter()
     for line in f:
     	# for json: 
         # tweet = json.loads(line)
@@ -89,13 +93,30 @@ with open(fname, 'r') as f:
         count_terms_only.update(terms_only)
         count_hash.update(terms_hash)
 
+        # for all co-occurrences
         for i in range(len(terms_only)-1):            
             for j in range(i+1, len(terms_only)):
                 w1, w2 = sorted([terms_only[i], terms_only[j]])                
                 if w1 != w2:
                     com[w1][w2] += 1
 
+        # for search word co-occurrences
+        if search_word in terms_only:
+            count_search.update(terms_only)
 
+
+'''
+Custom co-occurrence lookup 
+'''
+# search_word = 'sys.argv[1]' # pass a term as a command-line argument
+print("Co-occurrence for %s:" % search_word)
+print(count_search.most_common(20))
+print()
+
+
+'''
+Co-occurrences 
+'''
 com_max = []
 # For each term, look for the most common co-occurrent terms
 for t1 in com:
@@ -104,22 +125,27 @@ for t1 in com:
         com_max.append(((t1, t2), t2_count))
 # Get the most frequent co-occurrences
 terms_max = sorted(com_max, key=operator.itemgetter(1), reverse=True)
+print("co-occurrences")
 print(terms_max[:5])
 
-print
+
+'''
+Most frequent terms 
+'''
+print()
 # most frequent words (not cleaned, includes punctuation etc.)
 print("Most common (not clean)")
 print(count_all.most_common(5))
-print
+print()
 
 # most frequent words, cleaned 
 print("Most common (clean)")
 print(count_terms_only.most_common(5))
-print
+print()
 
 print("Bigram (clean)")
 print(terms_only_bigram.most_common(10))
-print
+print()
 
 # most hashtags
 print("Most common Hashtags")
