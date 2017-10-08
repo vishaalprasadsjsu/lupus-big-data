@@ -5,6 +5,7 @@ import string
 import re
 from nltk import bigrams 
 from collections import defaultdict
+import vincent 
 
 '''
 Counts the most frequent words in a text file
@@ -25,7 +26,7 @@ com = defaultdict(lambda : defaultdict(int))
 fname = 'twython_data.txt'
 
 # for co-occurrences
-search_word = 'Selena'
+search_word = 'Lupus'
 
 emoticons_str = r"""
     (?:
@@ -150,4 +151,20 @@ print()
 # most hashtags
 print("Most common Hashtags")
 print(count_hash.most_common(5))
+
+'''
+Vincent, run with: 
+$ python3 -m http.server 8888
+'''
+# word_freq = terms_only_bigram.most_common(10)
+word_freq = count_hash.most_common(10)
+labels, freq = zip(*word_freq)
+data = {'data': freq, 'x': labels}
+bar = vincent.Bar(data, iter_idx='x')
+bar.to_json('term_freq.json')
+
+
+
+
+
 
