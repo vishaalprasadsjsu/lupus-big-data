@@ -157,7 +157,7 @@ Vincent, run with:
 $ python3 -m http.server 8888
 '''
 # word_freq = terms_only_bigram.most_common(10)
-word_freq = count_hash.most_common(10)
+word_freq = count_terms_only.most_common(10)
 labels, freq = zip(*word_freq)
 data = {'data': freq, 'x': labels}
 bar = vincent.Bar(data, iter_idx='x')
