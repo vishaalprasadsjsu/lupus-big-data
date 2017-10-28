@@ -367,7 +367,7 @@ class Scrape:
                 # print "THERE WAS AT LEAST 1 STATUS ON THE FIRST PAGE! NOW MOVING TO GRAB EARLIER TWEETS"
 
                 count = 2
-                max_count = 40
+                max_count = 100
                 while count < max_count:
                     print "\r%s" % (count),
                     sys.stdout.flush()
