@@ -1,0 +1,1 @@
+SELECT COUNT(distinct from_user_screen_name) FROM hashtags WHERE hashtags.retweeted_status LIKE '';
