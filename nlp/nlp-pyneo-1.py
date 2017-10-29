@@ -3,7 +3,7 @@ import re, string
 
 from neo4j.v1 import GraphDatabase, basic_auth
 
-driver = GraphDatabase.driver("bolt://localhost:76877", auth=basic_auth("neo4j", "neo4j"))
+driver = GraphDatabase.driver("bolt://localhost:7687", auth=basic_auth("neo4j", "neo4j"))
 session = driver.session()
 
 
