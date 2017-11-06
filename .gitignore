@@ -142,3 +142,4 @@ vignettes/*.pdf
 ############## specific to this project ##############
 keys.py
 *.sqlite
+.~*.twbr
