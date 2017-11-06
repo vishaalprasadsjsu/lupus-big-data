@@ -79,6 +79,7 @@ class Messages(Base):
     video_link = Column(Integer)
     photo_link = Column(Integer)
     twitpic = Column(Integer)
+    utc_offset = Column(Integer)
     
     def __init__(self, query, tweet_id, inserted_date, truncated, language, possibly_sensitive, coordinates, 
     retweeted_status, created_at_text, created_at, content, 
@@ -86,7 +87,7 @@ class Messages(Base):
     from_user_listed_count, from_user_statuses_count, from_user_description,   
     from_user_location, from_user_created_at, retweet_count, entities_urls,entities_urls_count,         
     entities_hashtags, entities_hashtags_count,entities_mentions,entities_mentions_count, in_reply_to_screen_name, in_reply_to_status_id, source, entities_expanded_urls, json_output, 
-    entities_media_count, media_expanded_url, media_url, media_type,video_link, photo_link,twitpic  
+    entities_media_count, media_expanded_url, media_url, media_type,video_link, photo_link,twitpic, utc_offset
     ):        
         self.query = query
         self.tweet_id = tweet_id
@@ -127,6 +128,7 @@ class Messages(Base):
         self.video_link = video_link
         self.photo_link = photo_link
         self.twitpic = twitpic
+        self.utc_offset = utc_offset
   
 
     def __repr__(self):
@@ -198,6 +200,7 @@ def write_data(self, d):
         from_user_description = entry['user']['description'] 
         from_user_location = entry['user']['location'] 
         from_user_created_at = entry['user']['created_at']
+        utc_offset = entry['user']['utc_offset']
         
         retweet_count = entry['retweet_count'] 
         
@@ -315,7 +318,7 @@ def write_data(self, d):
                 from_user_friends_count, from_user_listed_count, from_user_statuses_count, from_user_description,   
                 from_user_location, from_user_created_at, retweet_count, entities_urls, entities_urls_count,         
                 entities_hashtags, entities_hashtags_count, entities_mentions,entities_mentions_count, in_reply_to_screen_name, in_reply_to_status_id, source, entities_expanded_urls, json_output, 
-                entities_media_count, media_expanded_url, media_url, media_type,video_link, photo_link,twitpic)
+                entities_media_count, media_expanded_url, media_url, media_type,video_link, photo_link, twitpic, utc_offset)
             
             self.session.add(upd)
       
