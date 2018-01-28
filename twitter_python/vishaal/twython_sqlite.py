@@ -47,7 +47,7 @@ class Messages(Base):
     language = Column(String)
     possibly_sensitive = Column(String)  ### NEW 
     coordinates = Column(String)
-    retweeted_status = Column(String)
+    retweeted_status = Column(Integer)
     created_at_text = Column(String)  
     created_at = Column(DateTime)
     content = Column(Text)
@@ -180,9 +180,9 @@ def write_data(self, d):
             coordinates = ''
             
         if 'retweeted_status' in entry:
-            retweeted_status = 'THIS IS A RETWEET --> DOUBLE-CHECK JSON'
+            retweeted_status = 1
         else:
-            retweeted_status = ''  
+            retweeted_status = 0
         
         content = entry['full_text']
         # content = content.replace('\n','')

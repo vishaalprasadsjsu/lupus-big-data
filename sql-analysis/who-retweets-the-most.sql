@@ -1,1 +1,1 @@
-SELECT hashtags.from_user_screen_name, count(*) AS freq FROM hashtags WHERE hashtags.retweeted_status LIKE 'THIS%JSON' GROUP BY hashtags.from_user_screen_name ORDERY BY count(*) ASC;
+SELECT hashtags.from_user_screen_name, count(*) AS freq FROM hashtags WHERE hashtags.retweeted_status = 1 GROUP BY hashtags.from_user_screen_name ORDERY BY count(*) ASC;

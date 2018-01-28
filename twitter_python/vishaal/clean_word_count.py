@@ -23,7 +23,7 @@ stop = stopwords.words('english') + punctuation + ['RT', 'via']
 com = defaultdict(lambda : defaultdict(int))
 
 # file
-fname = 'twython_data.txt'
+fname = 'tweet_content.txt'
 
 # for co-occurrences
 search_word = 'Lupus'
@@ -162,9 +162,3 @@ labels, freq = zip(*word_freq)
 data = {'data': freq, 'x': labels}
 bar = vincent.Bar(data, iter_idx='x')
 bar.to_json('term_freq.json')
-
-
-
-
-
-

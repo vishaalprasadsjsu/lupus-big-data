@@ -22,9 +22,7 @@ import keys
 
 '''
 Uses twython to make API calls to twitter 
-This will output all data in two ways: 
-    SQLITE database - lots of metadata 
-    Plain text (each line contains the tweet text) 
+This will output all data into plain text 
 '''
 
 # search keys
