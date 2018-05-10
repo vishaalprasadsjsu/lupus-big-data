@@ -41,7 +41,6 @@ regex_str = [
     r'(?:@[\w_]+)', # @-mentions
     r"(?:\#+[\w_]+[\w\'_\-]*[\w_]+)", # hash-tags
     r'http[s]?://(?:[a-z]|[0-9]|[$-_@.&amp;+]|[!*\(\),]|(?:%[0-9a-f][0-9a-f]))+', # URLs
- 
     r'(?:(?:\d+,?)+(?:\.?\d+)?)', # numbers
     r"(?:[a-z][a-z'\-_]+[a-z])", # words with - and '
     r'(?:[\w_]+)', # other words
@@ -68,7 +67,7 @@ with open(fname, 'r') as f:
     terms_only_bigram = Counter()
     count_search = Counter()
     for line in f:
-    	# for json: 
+        # for json: 
         # tweet = json.loads(line)
 
         # for plain text:

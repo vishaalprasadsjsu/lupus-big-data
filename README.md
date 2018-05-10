@@ -19,7 +19,8 @@ The two languages we use mostly are [R](https://www.r-project.org/) and [Python 
 To make gathering data easier, we use packages such as [rtweet](https://cran.r-project.org/web/packages/rtweet/vignettes/intro.html) and [Twython](https://twython.readthedocs.io/en/latest/).
 
 Findings & Notebooks
-------------------
+--------------------
 Here are notebooks with our findings: 
 * [Classification using ML](./ml/tweet_classification.ipynb) (in progress)
 * [Misc Tweet Analysis](./twitter_python/lupus-graphs.ipynb)
+* [NLP Analysis](./twitter_python/clean_word_count_nb.ipynb)
