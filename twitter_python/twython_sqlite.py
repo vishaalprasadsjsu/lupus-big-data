@@ -22,6 +22,7 @@ import keys
 '''
 Uses twython to make API calls to twitter 
 This will output all data into a SQLITE database
+Inspiration from: https://gist.github.com/gdsaxton/b0d36c10bbdb80e26b692a1d1a3e11de
 '''
 
 # search terms 
