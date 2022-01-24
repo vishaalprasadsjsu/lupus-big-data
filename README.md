@@ -21,6 +21,6 @@ To make gathering data easier, we use packages such as [rtweet](https://cran.r-p
 Findings & Notebooks
 --------------------
 Here are notebooks with our findings: 
-* [Classification using ML](./ml/tweet_classification.ipynb) (in progress)
+* [Classification using ML](./ml/tweet_classification.ipynb) 
 * [Misc Tweet Analysis](./twitter_python/lupus-graphs.ipynb)
 * [NLP Analysis](./twitter_python/clean_word_count_nb.ipynb)
