@@ -1,7 +1,7 @@
 Lupus Big Data Project 
 ======================
 
-The purpose of this project is to analyze data from Twitter using Big Data tools to see what [Lupus](http://www.mayoclinic.org/diseases-conditions/lupus/basics/definition/con-20019676) patients, and others affected by Lupus, are saying.  If successful, this information can be used to help direct Lupus research. 
+The purpose of this project is to analyze data from Twitter using Big Data tools to see what [Lupus](http://www.mayoclinic.org/diseases-conditions/lupus/basics/definition/con-20019676) patients, and others affected by Lupus, are saying.  This information can be used to help direct Lupus research. 
 
 Gathering Data 
 --------------
